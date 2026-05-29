@@ -1,3 +1,7 @@
+# Mission Dilse NGO Website
+
+Welcome to the Mission Dilse NGO Website repository! This platform is dedicated to showcasing our initiatives, gallery, and providing a way for people to connect with us to contribute to our cause. Built with Next.js, this site offers both a public-facing informative frontend and an admin panel for managing our content.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

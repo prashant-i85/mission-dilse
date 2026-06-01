@@ -12,6 +12,7 @@ interface Work {
   cover_image_url?: string | null
   is_visible: boolean
   created_at: string
+  category?: string
 }
 
 // Initial mock data for developer preview
@@ -22,6 +23,7 @@ const initialMockWorks: Work[] = [
     description: 'We successfully distributed over 500 meals to daily wage workers and children in the local community.',
     is_visible: true,
     created_at: new Date().toISOString(),
+    category: 'DISTRIBUTION',
   },
   {
     id: 'mock-2',
@@ -29,6 +31,7 @@ const initialMockWorks: Work[] = [
     description: 'Organized a free health and eye checkup camp in collaboration with local hospitals.',
     is_visible: false,
     created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
+    category: 'HEALTHCARE',
   },
 ]
 
@@ -199,8 +202,15 @@ export default function AdminWorksList() {
                     >
                       <td className="py-4 px-6">
                         <div className="font-semibold text-white">{work.title}</div>
-                        <div className="text-xs text-brand-charcoal-100/50 line-clamp-1 mt-1">
-                          {work.description}
+                        <div className="flex items-center gap-2 mt-1">
+                          {work.category && (
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-brand-gold-500/10 border border-brand-gold-500/25 text-[10px] font-extrabold text-brand-gold-500 uppercase tracking-wider select-none shrink-0">
+                              {work.category}
+                            </span>
+                          )}
+                          <span className="text-xs text-brand-charcoal-100/50 line-clamp-1">
+                            {work.description}
+                          </span>
                         </div>
                       </td>
                       <td className="py-4 px-6 text-brand-charcoal-100/70 text-sm whitespace-nowrap">

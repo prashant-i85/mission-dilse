@@ -15,6 +15,7 @@ import {
   Info,
 } from 'lucide-react'
 import Image from 'next/image'
+import ImageCropper from '@/components/admin/ImageCropper'
 
 interface Photo {
   id: string
@@ -81,11 +82,23 @@ export default function AdminGalleryManager() {
     loadPhotos()
   }, [supabase])
 
+  const [isCropperOpen, setIsCropperOpen] = useState(false)
+  const [rawImageFile, setRawImageFile] = useState<File | null>(null)
+  const [croppedPreviewUrl, setCroppedPreviewUrl] = useState<string | null>(null)
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0])
+      setRawImageFile(e.target.files[0])
+      setIsCropperOpen(true)
       setError(null)
     }
+  }
+
+  const handleCropComplete = (croppedFile: File, croppedUrl: string) => {
+    setSelectedFile(croppedFile)
+    setCroppedPreviewUrl(croppedUrl)
+    setIsCropperOpen(false)
+    setRawImageFile(null)
   }
 
   const handleUpload = async (e: React.FormEvent) => {
@@ -111,7 +124,7 @@ export default function AdminGalleryManager() {
         setPhotos((prev) => [newPhoto, ...prev])
         setSuccess(true)
         setCaption('')
-        setSelectedFile(null)
+        setCroppedPreviewUrl(null)
         // Reset file input value
         const fileInput = document.getElementById('photo-upload-input') as HTMLInputElement
         if (fileInput) fileInput.value = ''
@@ -141,6 +154,7 @@ export default function AdminGalleryManager() {
       setSuccess(true)
       setCaption('')
       setSelectedFile(null)
+      setCroppedPreviewUrl(null)
       const fileInput = document.getElementById('photo-upload-input') as HTMLInputElement
       if (fileInput) fileInput.value = ''
     } catch (err: any) {
@@ -276,10 +290,16 @@ export default function AdminGalleryManager() {
                   className="block w-full px-4 py-3 bg-brand-charcoal-900 border border-brand-charcoal-100/10 rounded-2xl text-brand-charcoal-100/50 file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand-charcoal-800 file:text-white file:cursor-pointer file:hover:bg-brand-charcoal-700 text-xs focus:outline-none focus:border-brand-orange-500 transition-all"
                 />
               </div>
-              {selectedFile && (
-                <p className="text-xs text-brand-charcoal-100/40 mt-2">
-                  Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
-                </p>
+              {croppedPreviewUrl && (
+                <div className="mt-3 space-y-2">
+                  <p className="text-xs text-brand-charcoal-100/50">Cropped Image Preview:</p>
+                  <div className="relative w-36 h-28 rounded-xl bg-brand-charcoal-900 border border-brand-charcoal-100/10 overflow-hidden">
+                    <img src={croppedPreviewUrl} alt="Cropped Preview" className="w-full h-full object-cover" />
+                  </div>
+                  <p className="text-xs text-brand-charcoal-100/40">
+                    Ready to upload ({(selectedFile!.size / 1024 / 1024).toFixed(2)} MB)
+                  </p>
+                </div>
               )}
             </div>
 
@@ -411,6 +431,19 @@ export default function AdminGalleryManager() {
           </div>
         )}
       </div>
+
+      <ImageCropper
+        isOpen={isCropperOpen}
+        file={rawImageFile}
+        aspectRatio={4 / 3}
+        onCrop={handleCropComplete}
+        onCancel={() => {
+          setIsCropperOpen(false)
+          setRawImageFile(null)
+          const fileInput = document.getElementById('photo-upload-input') as HTMLInputElement
+          if (fileInput) fileInput.value = ''
+        }}
+      />
     </div>
   )
 }

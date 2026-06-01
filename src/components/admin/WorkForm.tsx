@@ -4,19 +4,22 @@ import { useState } from 'react'
 import { uploadImage } from '@/lib/cloudinary'
 import { ArrowLeft, Loader2, Upload, Check, AlertCircle } from 'lucide-react'
 import Image from 'next/image'
+import ImageCropper from '@/components/admin/ImageCropper'
 
 interface WorkFormData {
   title: string
   description: string
   cover_image_url?: string | null
   is_visible: boolean
+  category?: string
 }
 
 interface WorkFormProps {
-  initialData?: WorkFormData
+  initialData?: any
   onSubmit: (data: WorkFormData) => Promise<void>
   onCancel: () => void
   titleLabel: string
+  hasCategoryColumn: boolean
 }
 
 export default function WorkForm({
@@ -24,6 +27,7 @@ export default function WorkForm({
   onSubmit,
   onCancel,
   titleLabel,
+  hasCategoryColumn,
 }: WorkFormProps) {
   const [title, setTitle] = useState(initialData?.title || '')
   const [description, setDescription] = useState(initialData?.description || '')
@@ -31,27 +35,37 @@ export default function WorkForm({
     initialData?.cover_image_url || null
   )
   const [isVisible, setIsVisible] = useState(initialData?.is_visible !== false)
+  const [category, setCategory] = useState(initialData?.category || '')
   
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [uploadingImage, setUploadingImage] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [isCropperOpen, setIsCropperOpen] = useState(false)
+  const [rawImageFile, setRawImageFile] = useState<File | null>(null)
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
+    setRawImageFile(file)
+    setIsCropperOpen(true)
+  }
 
-    setImageFile(file)
+  const handleCropComplete = async (croppedFile: File) => {
+    setIsCropperOpen(false)
+    setImageFile(croppedFile)
     setUploadingImage(true)
     setError(null)
 
     try {
-      const url = await uploadImage(file)
+      const url = await uploadImage(croppedFile)
       setCoverImageUrl(url)
     } catch (err: any) {
       setError(err.message || 'Failed to upload image. Please try again.')
     } finally {
       setUploadingImage(false)
+      setRawImageFile(null)
     }
   }
 
@@ -68,6 +82,7 @@ export default function WorkForm({
         description,
         cover_image_url: coverImageUrl,
         is_visible: isVisible,
+        category: category.trim(),
       })
     } catch (err: any) {
       setError(err.message || 'Failed to save work details.')
@@ -111,6 +126,26 @@ export default function WorkForm({
             className="block w-full px-4 py-3 bg-brand-charcoal-900 border border-brand-charcoal-100/10 rounded-2xl text-white placeholder-brand-charcoal-100/30 focus:outline-none focus:border-brand-orange-500 transition-all text-sm"
             placeholder="e.g. Winter Clothes Distribution 2026"
           />
+        </div>
+
+        {/* Category */}
+        <div>
+          <label htmlFor="category" className="block text-xs font-semibold uppercase tracking-wider text-brand-charcoal-100/70 mb-2">
+            Work Category / Focus Area
+          </label>
+          <input
+            id="category"
+            type="text"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            placeholder="e.g. ELDER WORK, EDUCATION, DONATION, HEALTHCARE"
+            className="block w-full px-4 py-3 bg-brand-charcoal-900 border border-brand-charcoal-100/10 rounded-2xl text-white placeholder-brand-charcoal-100/30 focus:outline-none focus:border-brand-orange-500 transition-all text-sm"
+          />
+          {!hasCategoryColumn && (
+            <p className="text-amber-500 text-[10px] mt-1.5 leading-normal">
+              ⚠️ <strong>Database update required:</strong> To save this category, copy and run this in your **Supabase SQL Editor**: <code className="bg-black/35 px-1.5 py-0.5 rounded text-amber-200 font-mono text-[10px] select-all">ALTER TABLE works ADD COLUMN IF NOT EXISTS category text;</code>
+            </p>
+          )}
         </div>
 
         {/* Description */}
@@ -164,6 +199,7 @@ export default function WorkForm({
                   </>
                 )}
                 <input
+                  id="work-upload-input"
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
@@ -222,6 +258,19 @@ export default function WorkForm({
           </button>
         </div>
       </form>
+
+      <ImageCropper
+        isOpen={isCropperOpen}
+        file={rawImageFile}
+        aspectRatio={4 / 3}
+        onCrop={handleCropComplete}
+        onCancel={() => {
+          setIsCropperOpen(false)
+          setRawImageFile(null)
+          const fileInput = document.getElementById('work-upload-input') as HTMLInputElement
+          if (fileInput) fileInput.value = ''
+        }}
+      />
     </div>
   )
 }

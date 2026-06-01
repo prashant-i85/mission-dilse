@@ -3,6 +3,25 @@
 import { useState } from 'react'
 import { Mail, Phone, MapPin, Info, Heart, CheckCircle } from 'lucide-react'
 
+const Instagram = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+)
+
 interface ContactProps {
   email?: string | null
   phone?: string | null
@@ -35,15 +54,15 @@ export default function Contact({ email, phone, address, extra_info, heading, de
   const finalAmount = customAmount ? parseFloat(customAmount) : selectedAmount
 
   return (
-    <section id="contact" className="py-24 bg-brand-sand-100">
+    <section id="contact" className="py-24 bg-brand-sand-100 bg-gold-glow">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-5xl font-black font-display tracking-tight text-brand-sand-900 uppercase mb-4">
+          <h2 className="text-5xl font-black font-display tracking-tight text-gold-texture uppercase mb-4">
             {heading || 'GET IN TOUCH'}
           </h2>
-          <div className="w-12 h-1 bg-brand-emerald-600 mx-auto rounded-full mb-6" />
+          <div className="w-16 h-1.5 bg-gradient-to-r from-[#ffe088] via-[#f2ca50] to-[#d4af37] mx-auto rounded-full mb-6" />
           <p className="text-base text-brand-sand-900/70 leading-relaxed max-w-xl mx-auto">
             {description || 'Have questions, want to partner, or support our operations? Connect with us or support our cause below.'}
           </p>
@@ -54,10 +73,10 @@ export default function Contact({ email, phone, address, extra_info, heading, de
           {/* Left Column: Contact info */}
           <div className="space-y-8 lg:pr-6">
             <div className="space-y-4">
-              <span className="text-[10px] font-bold tracking-widest text-brand-emerald-600 uppercase block">
+              <span className="text-[10px] font-bold tracking-widest text-brand-gold-500 uppercase block">
                 CONTACT DETAILS
               </span>
-              <h3 className="text-3xl font-black font-display text-brand-sand-900 leading-tight uppercase">
+              <h3 className="text-3xl font-black font-display text-gold-texture leading-tight uppercase">
                 WE WOULD LOVE TO HEAR FROM YOU
               </h3>
               <p className="text-sm text-brand-sand-900/60 leading-relaxed">
@@ -68,7 +87,7 @@ export default function Contact({ email, phone, address, extra_info, heading, de
             <div className="space-y-6 pt-4 border-t border-brand-sand-300">
               {email && (
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-brand-emerald-50 text-brand-emerald-600 rounded-2xl border border-brand-emerald-100">
+                  <div className="p-3 bg-brand-gold-500/10 text-brand-gold-500 rounded-2xl border border-brand-gold-500/25">
                     <Mail className="h-5 w-5" />
                   </div>
                   <div>
@@ -77,7 +96,7 @@ export default function Contact({ email, phone, address, extra_info, heading, de
                     </h4>
                     <a
                       href={`mailto:${email}`}
-                      className="text-base font-bold text-brand-sand-900 hover:text-brand-emerald-600 transition-colors"
+                      className="text-base font-bold text-brand-sand-900 hover:text-brand-gold-500 transition-colors"
                     >
                       {email}
                     </a>
@@ -87,7 +106,7 @@ export default function Contact({ email, phone, address, extra_info, heading, de
 
               {phone && (
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-brand-emerald-50 text-brand-emerald-600 rounded-2xl border border-brand-emerald-100">
+                  <div className="p-3 bg-brand-gold-500/10 text-brand-gold-500 rounded-2xl border border-brand-gold-500/25">
                     <Phone className="h-5 w-5" />
                   </div>
                   <div>
@@ -96,7 +115,7 @@ export default function Contact({ email, phone, address, extra_info, heading, de
                     </h4>
                     <a
                       href={`tel:${phone}`}
-                      className="text-base font-bold text-brand-sand-900 hover:text-brand-emerald-600 transition-colors"
+                      className="text-base font-bold text-brand-sand-900 hover:text-brand-gold-500 transition-colors"
                     >
                       {phone}
                     </a>
@@ -106,7 +125,7 @@ export default function Contact({ email, phone, address, extra_info, heading, de
 
               {address && (
                 <div className="flex items-start gap-4">
-                  <div className="p-3 bg-brand-emerald-50 text-brand-emerald-600 rounded-2xl border border-brand-emerald-100">
+                  <div className="p-3 bg-brand-gold-500/10 text-brand-gold-500 rounded-2xl border border-brand-gold-500/25">
                     <MapPin className="h-5 w-5" />
                   </div>
                   <div>
@@ -119,20 +138,43 @@ export default function Contact({ email, phone, address, extra_info, heading, de
                   </div>
                 </div>
               )}
+
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-brand-gold-500/10 text-brand-gold-500 rounded-2xl border border-brand-gold-500/25">
+                  <Instagram className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="text-[10px] font-bold uppercase tracking-wider text-brand-sand-900/40 mb-1">
+                    Instagram
+                  </h4>
+                  <a
+                    href="https://www.instagram.com/missiondilse/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-base font-bold text-brand-sand-900 hover:text-brand-gold-500 transition-colors"
+                  >
+                    @missiondilse
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Right Column: Interactive Choose Donate Card with Dynamic Live UPI QR Code Generator */}
-          <div className="bg-brand-sand-50 border border-brand-sand-300 rounded-[2.5rem] p-8 sm:p-10 shadow-xl relative overflow-hidden flex flex-col justify-between">
-            <div className="absolute top-0 right-0 w-24 h-24 rounded-full bg-brand-emerald-600/5 -mr-8 -mt-8" />
+          <div className="bg-brand-sand-200 border border-brand-sand-300 rounded-[2.5rem] p-8 sm:p-10 shadow-xl relative overflow-hidden flex flex-col justify-between hover:shadow-[0_0_35px_rgba(212,175,55,0.1)] transition-all duration-500">
+            <div className="absolute top-0 right-0 w-24 h-24 rounded-full bg-brand-gold-500/10 -mr-8 -mt-8" />
             
             <div className="space-y-6 relative z-10">
               <div className="text-center">
-                <Heart className="h-8 w-8 text-brand-emerald-600 fill-brand-emerald-600/10 mx-auto mb-2" />
-                <h3 className="text-xl font-black font-display text-brand-sand-900 uppercase">
+                <img
+                  src="/logo_donation.png"
+                  alt="Mission Dilse Logo"
+                  className="h-16 w-auto mx-auto mb-3 object-contain"
+                />
+                <h3 className="text-xl font-black font-display text-gold-texture uppercase">
                   SUPPORT OUR CAUSE
                 </h3>
-                <p className="text-xs text-brand-sand-900/50 mt-1">
+                <p className="text-xs text-brand-sand-800 mt-1">
                   Select or enter an amount to generate your instant Google Pay / UPI QR Code.
                 </p>
               </div>
@@ -151,8 +193,8 @@ export default function Contact({ email, phone, address, extra_info, heading, de
                       }}
                       className={`py-3 rounded-2xl text-xs font-bold border transition-all ${
                         isSelected
-                          ? 'bg-brand-emerald-600 text-white border-brand-emerald-600 shadow-md'
-                          : 'bg-white text-brand-sand-900/80 border-brand-sand-300 hover:border-brand-emerald-600/50'
+                          ? 'bg-brand-gold-500 text-primary-foreground border-brand-gold-500 shadow-md'
+                          : 'bg-white text-gray-700 border-brand-sand-300 hover:border-brand-gold-500/50'
                       }`}
                     >
                       ₹{amount.toLocaleString('en-IN')}
@@ -167,8 +209,8 @@ export default function Contact({ email, phone, address, extra_info, heading, de
                     setCustomAmount(e.target.value)
                     setSelectedAmount('')
                   }}
-                  className={`py-2.5 px-3 rounded-2xl text-xs font-bold text-center border bg-white focus:outline-none focus:border-brand-emerald-600 transition-all ${
-                    customAmount ? 'border-brand-emerald-600 ring-1 ring-brand-emerald-600' : 'border-brand-sand-300'
+                  className={`py-2.5 px-3 rounded-2xl text-xs font-bold text-center border bg-white focus:outline-none focus:border-brand-gold-500 transition-all ${
+                    customAmount ? 'border-brand-gold-500 ring-1 ring-brand-gold-500' : 'border-brand-sand-300'
                   }`}
                 />
               </div>
@@ -177,7 +219,7 @@ export default function Contact({ email, phone, address, extra_info, heading, de
               <div className="bg-brand-sand-100 p-5 rounded-3xl border border-brand-sand-300 flex flex-col items-center justify-center min-h-[220px] transition-all">
                 {finalAmount && parseFloat(finalAmount.toString()) > 0 ? (
                   <div className="flex flex-col items-center justify-center gap-3 animate-fade-in">
-                    <div className="p-3 bg-white rounded-2xl border border-brand-sand-300 shadow-inner">
+                    <div className="p-3 bg-white rounded-2xl border border-brand-gold-500/20 shadow-inner">
                       {/* Generates live UPI QR code */}
                       <img
                         src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(
@@ -189,7 +231,7 @@ export default function Contact({ email, phone, address, extra_info, heading, de
                         className="w-[160px] h-[160px] object-contain select-none"
                       />
                     </div>
-                    <span className="text-[10px] font-black text-brand-emerald-700 tracking-widest uppercase">
+                    <span className="text-[10px] font-black text-gold-texture tracking-widest uppercase">
                       SCAN & PAY ₹{parseFloat(finalAmount.toString()).toLocaleString('en-IN')}
                     </span>
                   </div>

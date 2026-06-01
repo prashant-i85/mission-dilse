@@ -42,19 +42,12 @@ export default function Metrics({ textCopy }: MetricsProps) {
       icon: Award,
       description: textCopy?.metric_3_desc || 'Local development initiatives',
     },
-    {
-      id: 4,
-      value: textCopy?.metric_4_val || '12A / 80G',
-      label: textCopy?.metric_4_label || 'Certified NGO',
-      icon: ShieldCheck,
-      description: textCopy?.metric_4_desc || 'Tax exemption tax deductible',
-    },
   ]
 
   return (
-    <section className="bg-brand-sand-100 py-16 border-b border-brand-sand-300">
+    <section className="bg-brand-sand-100 bg-gold-glow py-16 border-b border-brand-sand-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 divide-y-0 divide-x-0 sm:divide-x sm:divide-brand-sand-300">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-12 divide-y-0 divide-x-0 sm:divide-x sm:divide-brand-gold-500/15">
           {stats.map((stat, idx) => {
             const Icon = stat.icon
             return (
@@ -64,13 +57,13 @@ export default function Metrics({ textCopy }: MetricsProps) {
                   idx > 0 ? 'pt-8 sm:pt-0' : ''
                 }`}
               >
-                <div className="p-3 bg-brand-emerald-50 text-brand-emerald-600 rounded-2xl mb-4 border border-brand-emerald-100 shadow-sm">
+                <div className="p-3 bg-brand-gold-500/10 text-brand-gold-500 rounded-2xl mb-4 border border-brand-gold-500/25 shadow-[0_0_15px_rgba(242,202,80,0.1)]">
                   <Icon className="h-6 w-6" />
                 </div>
-                <div className="text-4xl sm:text-5xl font-black font-display text-brand-sand-900 tracking-tight mb-1">
+                <div className="text-4xl sm:text-5xl font-black font-display text-gold-texture tracking-tight mb-1">
                   {stat.value}
                 </div>
-                <div className="text-sm font-bold text-brand-emerald-700 tracking-wide mb-1 uppercase">
+                <div className="text-sm font-bold text-brand-gold-500 tracking-wide mb-1 uppercase">
                   {stat.label}
                 </div>
                 <div className="text-xs text-brand-sand-900/60 leading-normal max-w-[180px]">

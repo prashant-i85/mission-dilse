@@ -38,6 +38,7 @@ export default function AdminEditWork() {
   const [work, setWork] = useState<Work | null>(null)
   const [loading, setLoading] = useState(true)
   const [isDemoMode, setIsDemoMode] = useState(false)
+  const [hasCategoryColumn, setHasCategoryColumn] = useState(false)
   
   const supabase = createClient()
 
@@ -45,6 +46,7 @@ export default function AdminEditWork() {
     async function loadWork() {
       if (id.startsWith('mock-')) {
         setIsDemoMode(true)
+        setHasCategoryColumn(true)
         const found = mockWorks.find((w) => w.id === id)
         setWork(found || null)
         setLoading(false)
@@ -52,6 +54,14 @@ export default function AdminEditWork() {
       }
 
       try {
+        // Dynamic column check
+        const { error: checkError } = await supabase
+          .from('works')
+          .select('category')
+          .limit(1)
+        const hasCol = !checkError || (checkError.code !== 'PGRST100' && !checkError.message.includes('category'))
+        setHasCategoryColumn(hasCol)
+
         const { data, error } = await supabase
           .from('works')
           .select('*')
@@ -61,6 +71,7 @@ export default function AdminEditWork() {
         if (error) {
           console.warn('Failed to load work, falling back to mock data.')
           setIsDemoMode(true)
+          setHasCategoryColumn(true)
           const found = mockWorks.find((w) => w.id === id)
           setWork(found || null)
         } else {
@@ -68,6 +79,7 @@ export default function AdminEditWork() {
         }
       } catch (err) {
         setIsDemoMode(true)
+        setHasCategoryColumn(true)
         const found = mockWorks.find((w) => w.id === id)
         setWork(found || null)
       } finally {
@@ -86,15 +98,20 @@ export default function AdminEditWork() {
     }
 
     try {
+      const payload: any = {
+        title: formData.title,
+        description: formData.description,
+        cover_image_url: formData.cover_image_url,
+        is_visible: formData.is_visible,
+        updated_at: new Date().toISOString(),
+      }
+      if (hasCategoryColumn) {
+        payload.category = formData.category
+      }
+
       const { error } = await supabase
         .from('works')
-        .update({
-          title: formData.title,
-          description: formData.description,
-          cover_image_url: formData.cover_image_url,
-          is_visible: formData.is_visible,
-          updated_at: new Date().toISOString(),
-        })
+        .update(payload)
         .eq('id', id)
 
       if (error) {
@@ -129,6 +146,7 @@ export default function AdminEditWork() {
       <WorkForm
         titleLabel="Edit Work Details"
         initialData={work}
+        hasCategoryColumn={hasCategoryColumn}
         onSubmit={handleSubmit}
         onCancel={() => router.push('/admin/works')}
       />

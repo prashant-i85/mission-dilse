@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { uploadImage } from '@/lib/cloudinary'
 import { Save, Loader2, Check, AlertCircle, Info, Upload } from 'lucide-react'
 import Image from 'next/image'
+import ImageCropper from '@/components/admin/ImageCropper'
 
 interface HeroData {
   ngo_name: string
@@ -79,20 +80,29 @@ export default function AdminHeroEditor() {
     loadHero()
   }, [supabase])
 
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [isCropperOpen, setIsCropperOpen] = useState(false)
+  const [rawImageFile, setRawImageFile] = useState<File | null>(null)
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
+    setRawImageFile(file)
+    setIsCropperOpen(true)
+  }
 
+  const handleCropComplete = async (croppedFile: File) => {
+    setIsCropperOpen(false)
     setUploadingImage(true)
     setError(null)
 
     try {
-      const url = await uploadImage(file)
+      const url = await uploadImage(croppedFile)
       setBgImageUrl(url)
     } catch (err: any) {
       setError(err.message || 'Failed to upload background photo.')
     } finally {
       setUploadingImage(false)
+      setRawImageFile(null)
     }
   }
 
@@ -294,6 +304,7 @@ export default function AdminHeroEditor() {
                     </>
                   )}
                   <input
+                    id="hero-upload-input"
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
@@ -330,6 +341,19 @@ export default function AdminHeroEditor() {
           </div>
         </form>
       </div>
+
+      <ImageCropper
+        isOpen={isCropperOpen}
+        file={rawImageFile}
+        aspectRatio={16 / 9}
+        onCrop={handleCropComplete}
+        onCancel={() => {
+          setIsCropperOpen(false)
+          setRawImageFile(null)
+          const fileInput = document.getElementById('hero-upload-input') as HTMLInputElement
+          if (fileInput) fileInput.value = ''
+        }}
+      />
     </div>
   )
 }

@@ -35,13 +35,15 @@ export default async function PublicLayout({
     <div className="flex flex-col min-h-screen bg-grain">
       <Navbar visibleSections={visibleSections} />
       <main className="flex-grow">{children}</main>
-      <footer className="bg-brand-charcoal-900 text-brand-charcoal-50 py-12 border-t border-brand-charcoal-800">
+      <footer className="bg-brand-sand-200 text-brand-sand-900 py-12 border-t border-brand-sand-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-center md:text-left">
-            <h3 className="font-display font-bold text-lg text-white">Mission Dilse NGO</h3>
-            <p className="text-sm text-brand-charcoal-100/60 mt-1">Making a difference from the heart.</p>
+            <h3 className="font-display font-bold text-lg text-gold-texture">Mission Dilse NGO</h3>
+            <p className="text-[10px] sm:text-xs font-bold text-brand-sand-800 uppercase tracking-widest mt-1.5">
+              BE SOMEONE'S REASON TO SMILE
+            </p>
           </div>
-          <p className="text-xs text-brand-charcoal-100/40">
+          <p className="text-xs text-brand-sand-800/60">
             © {new Date().getFullYear()} Mission Dilse. All rights reserved.
           </p>
         </div>

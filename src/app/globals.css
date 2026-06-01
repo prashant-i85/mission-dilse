@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: var(--font-inter), sans-serif;
-  --font-display: var(--font-oswald), sans-serif;
-  --font-condensed: var(--font-oswald), sans-serif;
+  --font-sans: var(--font-jakarta), sans-serif;
+  --font-display: var(--font-hanken), sans-serif;
+  --font-condensed: var(--font-hanken), sans-serif;
   --font-anton: var(--font-anton), sans-serif;
 
   --color-primary: var(--primary);
@@ -11,26 +11,27 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Keep other colors but adapt them to the new OKLCH theme for visual consistency */
-  --color-brand-emerald-50: oklch(0.98 0.01 165);
-  --color-brand-emerald-100: oklch(0.95 0.02 165);
-  --color-brand-emerald-600: oklch(0.52 0.13 165);
-  --color-brand-emerald-700: oklch(0.45 0.11 165);
-  --color-brand-emerald-800: oklch(0.38 0.09 165);
-  --color-brand-emerald-950: oklch(0.25 0.06 165);
+  /* Remap emerald green brand colors to soft sweet peach/terracotta */
+  --color-brand-emerald-50: #fdf5f0;
+  --color-brand-emerald-100: #fcece2;
+  --color-brand-emerald-600: #e09d78;
+  --color-brand-emerald-700: #d08258;
+  --color-brand-emerald-800: #bc6b40;
+  --color-brand-emerald-950: #faf7f2;
 
-  --color-brand-gold-100: #fef3c7;
-  --color-brand-gold-500: #d97706;
-  --color-brand-gold-600: #b45309;
+  --color-brand-gold-100: #fbf5e6;
+  --color-brand-gold-500: #dfba4a;
+  --color-brand-gold-600: #d4af37;
 
-  --color-brand-sand-50: oklch(0.99 0.005 95);
-  --color-brand-sand-100: oklch(0.98 0.012 95);
-  --color-brand-sand-200: oklch(0.97 0.015 95);
-  --color-brand-sand-300: oklch(0.92 0.02 95);
-  --color-brand-sand-800: oklch(0.3 0.02 200);
-  --color-brand-sand-900: oklch(0.2 0.02 200);
+  /* Remap sand (light background) colors to soft warm cream and white */
+  --color-brand-sand-50: #f9f5ed;
+  --color-brand-sand-100: #efe6d4;
+  --color-brand-sand-200: #ffffff;
+  --color-brand-sand-300: #dfd5c2;
+  --color-brand-sand-800: #7a6b5e;
+  --color-brand-sand-900: #332a24;
 
-  /* Admin Dashboard Theme Colors */
+  /* Admin Dashboard Theme Colors - kept clean */
   --color-brand-charcoal-50: #f9fafb;
   --color-brand-charcoal-100: #f3f4f6;
   --color-brand-charcoal-200: #e5e7eb;
@@ -51,12 +52,12 @@
 }
 
 :root {
-  --background: oklch(0.98 0.012 95);          /* warm beige */
-  --foreground: oklch(0.2 0.02 200);
-  --primary: oklch(0.52 0.13 165);              /* teal green */
-  --primary-foreground: oklch(0.98 0.012 95);
-  --card-background: oklch(0.99 0.008 95);
-  --border-color: oklch(0.92 0.02 95);
+  --background: #efe6d4;         /* Dimmer warm soft cream background */
+  --foreground: #332a24;         /* Deep espresso brown text for soft reading */
+  --primary: #d4af37;            /* Elegant warm gold */
+  --primary-foreground: #241a00; /* Dark gold text */
+  --card-background: #ffffff;    /* Pure warm white cards */
+  --border-color: #dfd5c2;       /* Very soft warm sand/cream borders */
 }
 
 /* Background Noise/Texture Simulation */
@@ -117,4 +118,27 @@ body {
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--color-brand-emerald-600);
+}
+
+/* Luxury theme gold glow decorations */
+.bg-gold-glow {
+  background-image: radial-gradient(circle at center, rgba(212, 175, 55, 0.075) 0%, transparent 70%);
+}
+
+.text-gold-gradient {
+  background-image: linear-gradient(to right, #ffe088, #f2ca50, #d4af37);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-gold-texture {
+  background-image: url('/gold_texture.jpg');
+  background-size: 400px 400px;
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: brightness(0.65) drop-shadow(0 2px 3px rgba(51, 42, 36, 0.2));
 }

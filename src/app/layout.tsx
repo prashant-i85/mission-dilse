@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Oswald, Anton } from "next/font/google";
+import { Inter, Oswald, Anton, Hanken_Grotesk, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -18,6 +18,16 @@ const anton = Anton({
   subsets: ["latin"],
 });
 
+const hankenGrotesk = Hanken_Grotesk({
+  variable: "--font-hanken",
+  subsets: ["latin"],
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: "Mission Dilse NGO",
   description: "Making a difference from the heart.",
@@ -31,10 +41,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${oswald.variable} ${anton.variable} h-full antialiased`}
+      className={`${inter.variable} ${oswald.variable} ${anton.variable} ${hankenGrotesk.variable} ${plusJakartaSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }
+
 

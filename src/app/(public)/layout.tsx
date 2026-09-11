@@ -37,11 +37,18 @@ export default async function PublicLayout({
       <main className="flex-grow">{children}</main>
       <footer className="bg-brand-sand-200 text-brand-sand-900 py-12 border-t border-brand-sand-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-center md:text-left">
-            <h3 className="font-display font-bold text-lg text-gold-texture">Mission Dilse NGO</h3>
-            <p className="text-[10px] sm:text-xs font-bold text-brand-sand-800 uppercase tracking-widest mt-1.5">
-              BE SOMEONE'S REASON TO SMILE
-            </p>
+          <div className="flex items-center gap-3.5 text-center md:text-left">
+            <img
+              src="/heart_logo.png"
+              alt="Mission Dilse Heart Logo"
+              className="h-10 sm:h-12 w-auto object-contain flex-shrink-0"
+            />
+            <div>
+              <h3 className="font-display font-bold text-lg text-gold-texture">Mission Dilse NGO</h3>
+              <p className="text-[10px] sm:text-xs font-bold text-brand-sand-800 uppercase tracking-widest mt-0.5">
+                BE SOMEONE'S REASON TO SMILE
+              </p>
+            </div>
           </div>
           <p className="text-xs text-brand-sand-800/60">
             © {new Date().getFullYear()} Mission Dilse. All rights reserved.

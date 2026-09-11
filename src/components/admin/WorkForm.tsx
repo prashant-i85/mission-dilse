@@ -1,15 +1,17 @@
 'use client'
 
-import { useState } from 'react'
-import { uploadImage } from '@/lib/cloudinary'
-import { ArrowLeft, Loader2, Upload, Check, AlertCircle } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { uploadImage, uploadVideo } from '@/lib/cloudinary'
+import { ArrowLeft, Loader2, Upload, Video, Check, AlertCircle } from 'lucide-react'
 import Image from 'next/image'
 import ImageCropper from '@/components/admin/ImageCropper'
+import { parseWorkVideo } from '@/lib/videoHelper'
 
 interface WorkFormData {
   title: string
   description: string
   cover_image_url?: string | null
+  video_url?: string | null
   is_visible: boolean
   category?: string
 }
@@ -29,18 +31,27 @@ export default function WorkForm({
   titleLabel,
   hasCategoryColumn,
 }: WorkFormProps) {
+  const initialParsed = parseWorkVideo({
+    video_url: initialData?.video_url,
+    description: initialData?.description,
+  })
+
   const [title, setTitle] = useState(initialData?.title || '')
-  const [description, setDescription] = useState(initialData?.description || '')
+  const [description, setDescription] = useState(initialParsed.description)
   const [coverImageUrl, setCoverImageUrl] = useState<string | null>(
     initialData?.cover_image_url || null
   )
+  const [videoUrl, setVideoUrl] = useState(initialParsed.video_url || '')
   const [isVisible, setIsVisible] = useState(initialData?.is_visible !== false)
   const [category, setCategory] = useState(initialData?.category || '')
   
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [uploadingImage, setUploadingImage] = useState(false)
+  const [uploadingVideo, setUploadingVideo] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const videoFileInputRef = useRef<HTMLInputElement>(null)
 
   const [isCropperOpen, setIsCropperOpen] = useState(false)
   const [rawImageFile, setRawImageFile] = useState<File | null>(null)
@@ -69,6 +80,23 @@ export default function WorkForm({
     }
   }
 
+  const handleVideoFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploadingVideo(true)
+    setError(null)
+    try {
+      const url = await uploadVideo(file)
+      setVideoUrl(url)
+    } catch (err: any) {
+      setError(err.message || 'Failed to upload video. Please try again.')
+    } finally {
+      setUploadingVideo(false)
+      // Reset file input so same file can be re-selected if needed
+      if (videoFileInputRef.current) videoFileInputRef.current.value = ''
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!title.trim()) return
@@ -81,6 +109,7 @@ export default function WorkForm({
         title,
         description,
         cover_image_url: coverImageUrl,
+        video_url: videoUrl.trim(),
         is_visible: isVisible,
         category: category.trim(),
       })
@@ -147,6 +176,65 @@ export default function WorkForm({
             </p>
           )}
         </div>
+
+        {/* Video Feed */}
+        <div>
+          <label htmlFor="video_url" className="block text-xs font-semibold uppercase tracking-wider text-brand-charcoal-100/70 mb-2">
+            Video Feed (Optional)
+          </label>
+
+          {/* URL text input */}
+          <div className="flex gap-2 items-center">
+            <input
+              id="video_url"
+              type="url"
+              value={videoUrl}
+              onChange={(e) => setVideoUrl(e.target.value)}
+              disabled={uploadingVideo}
+              placeholder="Paste YouTube link or upload a video file →"
+              className="block flex-1 min-w-0 px-4 py-3 bg-brand-charcoal-900 border border-brand-charcoal-100/10 rounded-2xl text-white placeholder-brand-charcoal-100/30 focus:outline-none focus:border-brand-orange-500 transition-all text-sm font-mono disabled:opacity-50"
+            />
+
+            {/* Upload video file button */}
+            <label className={`relative inline-flex items-center gap-1.5 px-4 py-3 rounded-2xl border border-dashed transition-all shrink-0 ${
+              uploadingVideo
+                ? 'border-brand-orange-500/40 text-brand-orange-400 cursor-wait'
+                : 'border-brand-charcoal-100/20 hover:border-brand-orange-500 text-brand-charcoal-100/70 hover:text-white cursor-pointer'
+            }`}>
+              {uploadingVideo ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin text-brand-orange-500" />
+                  <span className="text-sm font-semibold">Uploading…</span>
+                </>
+              ) : (
+                <>
+                  <Video className="h-4 w-4" />
+                  <span className="text-sm font-semibold">Upload File</span>
+                </>
+              )}
+              <input
+                ref={videoFileInputRef}
+                type="file"
+                accept="video/*"
+                onChange={handleVideoFileChange}
+                disabled={uploadingVideo}
+                className="hidden"
+              />
+            </label>
+          </div>
+
+          {/* Status hint */}
+          {videoUrl && !uploadingVideo ? (
+            <p className="text-emerald-400 text-[11px] mt-1.5 flex items-center gap-1">
+              <Check className="h-3 w-3" /> Video URL set. Will preview on the public page.
+            </p>
+          ) : (
+            <p className="text-brand-charcoal-100/40 text-[11px] mt-1.5">
+              Upload an MP4/WebM file or paste a YouTube / direct video link.
+            </p>
+          )}
+        </div>
+
 
         {/* Description */}
         <div>
@@ -244,7 +332,7 @@ export default function WorkForm({
           </button>
           <button
             type="submit"
-            disabled={saving || uploadingImage}
+            disabled={saving || uploadingImage || uploadingVideo}
             className="flex items-center justify-center gap-2 px-6 py-3 font-semibold text-sm text-white bg-brand-orange-600 hover:bg-brand-orange-700 disabled:bg-brand-orange-600/50 rounded-2xl shadow-lg transition-all transform hover:-translate-y-0.5 disabled:transform-none disabled:cursor-not-allowed"
           >
             {saving ? (

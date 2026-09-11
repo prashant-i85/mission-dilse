@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Hero from '@/components/public/Hero'
 import Metrics from '@/components/public/Metrics'
+import Founder from '@/components/public/Founder'
 import Works from '@/components/public/Works'
 import Gallery from '@/components/public/Gallery'
 import About from '@/components/public/About'
@@ -12,9 +13,10 @@ export const dynamic = 'force-dynamic'
 const mockWorks = [
   {
     id: 'mock-1',
-    title: 'Food Distribution Drive',
-    description: 'We successfully distributed over 500 hot meals to daily wage workers and children in the local community. Special thanks to our team of dedicated volunteers who managed the kitchen and distribution logistics.',
+    title: 'Food Distribution Drive & Field Video',
+    description: 'Watch video footage from our latest field drive! We successfully distributed over 500 hot meals to daily wage workers and children in the local community. Special thanks to our team of dedicated volunteers.',
     cover_image_url: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&auto=format&fit=crop&q=60',
+    video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     created_at: new Date().toISOString(),
   },
   {
@@ -89,7 +91,7 @@ export default async function PublicHomePage() {
     contact_description: 'Have questions, want to partner, or support our operations? Connect with us or support our cause below.',
     button_1_text: 'SUPPORT US',
     button_2_text: 'SHARE YOUR STORY',
-    upi_id: 'heromaurya1613-1@oksbi',
+    upi_id: 'praveenverma212005-1@okhdfcbank',
     payee_name: 'Mission Dilse',
     metric_1_val: '5,000+',
     metric_1_label: 'Meals Distributed',
@@ -231,6 +233,9 @@ export default async function PublicHomePage() {
 
       {/* Metrics Section */}
       <Metrics textCopy={homepageText} />
+
+      {/* Founder Section */}
+      <Founder />
 
       {/* Works Section */}
       {renderWorks && (

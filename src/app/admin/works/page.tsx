@@ -3,13 +3,15 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { Plus, Edit2, Trash2, Eye, EyeOff, Loader2, Calendar, FileText, Info } from 'lucide-react'
+import { Plus, Edit2, Trash2, Eye, EyeOff, Loader2, Calendar, FileText, Info, Film } from 'lucide-react'
+import { parseWorkVideo } from '@/lib/videoHelper'
 
 interface Work {
   id: string
   title: string
   description: string
   cover_image_url?: string | null
+  video_url?: string | null
   is_visible: boolean
   created_at: string
   category?: string
@@ -189,6 +191,8 @@ export default function AdminWorksList() {
               </thead>
               <tbody className="divide-y divide-brand-charcoal-100/5">
                 {works.map((work) => {
+                  const parsed = parseWorkVideo(work)
+                  const hasVideo = Boolean(parsed.video_url && parsed.video_url.length > 0)
                   const dateStr = new Date(work.created_at).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'short',
@@ -208,8 +212,14 @@ export default function AdminWorksList() {
                               {work.category}
                             </span>
                           )}
+                          {hasVideo && (
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-red-600/20 border border-red-500/30 text-[10px] font-extrabold text-red-400 uppercase tracking-wider select-none shrink-0">
+                              <Film className="w-2.5 h-2.5" />
+                              <span>Video</span>
+                            </span>
+                          )}
                           <span className="text-xs text-brand-charcoal-100/50 line-clamp-1">
-                            {work.description}
+                            {parsed.description}
                           </span>
                         </div>
                       </td>

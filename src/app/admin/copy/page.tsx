@@ -101,7 +101,9 @@ CREATE POLICY "Allow public select on homepage_text" ON homepage_text
   FOR SELECT USING (true);
 
 CREATE POLICY "Allow admin all on homepage_text" ON homepage_text
-  FOR ALL TO authenticated USING (true);
+  FOR ALL TO authenticated
+  USING ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin')
+  WITH CHECK ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
 
 INSERT INTO homepage_text (id) VALUES (1) ON CONFLICT (id) DO NOTHING;`
 

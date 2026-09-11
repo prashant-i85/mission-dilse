@@ -29,8 +29,21 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://missiondilse.com"),
   title: "Mission Dilse NGO",
   description: "Making a difference from the heart.",
+  alternates: {
+    canonical: "https://missiondilse.com",
+  },
+  icons: {
+    icon: [
+      { url: "/logo.png" },
+      { url: "/favicon.ico" },
+    ],
+    apple: [
+      { url: "/logo.png" },
+    ],
+  },
 };
 
 export default function RootLayout({
